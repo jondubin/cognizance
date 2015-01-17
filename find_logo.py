@@ -51,7 +51,7 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     cv2.imshow(win, vis)
 
 def main():
-    arg1 = sys.argv[1:]
+    arg1 = sys.argv[1]
     img1 = cv2.imread(arg1, 0)
 
     detector, matcher = init_feature()
@@ -69,7 +69,7 @@ def main():
             H, status = None, None
             print 'not enough matches for homography estimation'
 
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     while True:
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

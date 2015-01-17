@@ -1,8 +1,24 @@
 ##
+import os
 import cv2
-img = cv2.imread('./logo.png',0)
-surf = cv2.SURF(400)
-kp, des = surf.detectAndCompute(img,None)
+successes = 0
+failures = 0
+kp_list = []
+des_list = []
+logo_directory = '../scraper/logos'
+for file in os.listdir(logo_directory):
+	try:
+		print("Reading " + logo_directory + "/" + file)
+		img = cv2.imread(logo_directory + "/" + file, 0)
+		surf = cv2.SURF(400)
+		kp, des = surf.detectAndCompute(img,None)
+		kp_list.append(kp)
+		des_list.append(des)
+		successes += 1
+	except:
+		failures += 1
+	print("  Successes: " + str(successes))
+	print("  Failures:  " + str(failures))
 
 import cPickle
 from pymongo import MongoClient
@@ -14,7 +30,5 @@ conn = MongoClient()
 
 
 collection = conn.logos.descriptors
-collection.insert({'cpickle': Binary(cPickle.dumps(des, protocol=2))})
-
-##This returns the arrays 
-test = [cPickle.loads(x['cpickle']) for x in collection.find()]
+for des in des_list:
+	collection.insert({'cpickle': Binary(cPickle.dumps(des, protocol=2))})

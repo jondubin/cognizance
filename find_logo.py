@@ -2,7 +2,7 @@ import sys
 import numpy as np
 import cv2
 
-FLANN_INDEX_KDTREE = 1  # bug: flann enums are missing
+FLANN_INDEX_KDTREE = 1 # bug: flann enums are missing
 
 def init_feature():
     detector = cv2.SURF(1000)
@@ -11,7 +11,7 @@ def init_feature():
     matcher = cv2.FlannBasedMatcher(flann_params, {})
     return detector, matcher
 
-def filter_matches(kp1, kp2, matches, ratio = 0.65):
+def filter_matches(kp1, kp2, matches, ratio = 0.55):
     mkp1, mkp2 = [], []
     for m in matches:
         if len(m) == 2 and m[0].distance < m[1].distance * ratio:
@@ -27,7 +27,6 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
     vis = img2
-    # vis = cv2.cvtColor(vis, cv2.COLOR_GRAY2BGR)
 
     if H is not None:
         corners = np.float32([[0, 0], [w1, 0], [w1, h1], [0, h1]])
@@ -56,26 +55,30 @@ def main():
 
     detector, matcher = init_feature()
 
-    kp1, desc1 = detector.detectAndCompute(img1, None)
+    img1g = cv2.cvtColor(img1, cv2.COLOR_GRAY2BGR)
+    kp1, desc1 = detector.detectAndCompute(img1g, None)
 
-    def match_and_draw(win, img1, img2, kp1, kp2):
+    def match_and_draw(win, img1, img2, kp1, kp2, desc1, desc2):
         raw_matches = matcher.knnMatch(desc1, trainDescriptors = desc2, k = 2)
         p1, p2, kp_pairs = filter_matches(kp1, kp2, raw_matches)
 
         if len(p1) >= 4:
             H, status = cv2.findHomography(p1, p2, cv2.RANSAC, 5.0)
-            vis = explore_match(win, img1, img2, kp_pairs, status, H)
         else:
             H, status = None, None
             print 'not enough matches for homography estimation'
 
+        vis = explore_match(win, img1, img2, kp_pairs, status, H)
+
     cap = cv2.VideoCapture(0)
+    cap.set(3,640)
+    cap.set(4,480)
     while True:
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        kp2, desc2 = detector.detectAndCompute(frame, None)
-        match_and_draw('find_obj', img1, frame, kp1, kp2)
+        kp2, desc2 = detector.detectAndCompute(gray, None)
+        match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

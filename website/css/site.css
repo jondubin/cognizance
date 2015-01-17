@@ -1,0 +1,32 @@
+.navbar {
+	opacity: 0.9;
+}
+
+section {
+	width: 100%;
+	height: 100vh;
+	padding-top: 15vh;
+	padding-bottom: 20vh;
+	padding-left: 4vw;
+	padding-right: 4vw;
+	border-sizing: border-box;
+}
+
+section h1 {
+	text-align: center;
+	font-weight: normal;
+	font-size: 3.2vw;
+	margin-top: 25px;
+	margin-bottom: 7vh;
+}
+
+section p {
+	font-size: 1.3vw;
+}
+
+.fa-big {
+	font-size: 40vh;
+	text-align: center;
+	line-height: 40vh;
+	margin-bottom: 6.8vh;
+}

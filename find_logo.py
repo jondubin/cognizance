@@ -5,7 +5,7 @@ import cv2
 FLANN_INDEX_KDTREE = 1 # bug: flann enums are missing
 
 def init_feature():
-    detector = cv2.SURF(1000)
+    detector = cv2.SURF(800)
     norm = cv2.NORM_L2
     flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
     matcher = cv2.FlannBasedMatcher(flann_params, {})
@@ -31,21 +31,21 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     if H is not None:
         corners = np.float32([[0, 0], [w1, 0], [w1, h1], [0, h1]])
         corners = np.int32( cv2.perspectiveTransform(corners.reshape(1, -1, 2), H).reshape(-1, 2))
-        cv2.polylines(vis, [corners], True, (255, 255, 255))
-        # cv2.fillPoly(vis, [corners], (255, 255, 255))
+        # cv2.polylines(vis, [corners], True, (255, 255, 255))
+        cv2.fillPoly(vis, [corners], (255, 255, 255))
 
-    if status is None:
-        status = np.ones(len(kp_pairs), np.bool_)
-    p2 = np.int32([kpp[1].pt for kpp in kp_pairs])
+    # if status is None:
+    #     status = np.ones(len(kp_pairs), np.bool_)
+    # p2 = np.int32([kpp[1].pt for kpp in kp_pairs])
 
-    green = (0, 255, 0)
-    red = (0, 0, 255)
-    white = (255, 255, 255)
-    kp_color = (51, 103, 236)
-    for (x, y), inlier in zip(p2, status):
-        if inlier:
-            col = green
-            cv2.circle(vis, (x, y), 2, col, -1)
+    # green = (0, 255, 0)
+    # red = (0, 0, 255)
+    # white = (255, 255, 255)
+    # kp_color = (51, 103, 236)
+    # for (x, y), inlier in zip(p2, status):
+    #     if inlier:
+    #         col = green
+    #         cv2.circle(vis, (x, y), 2, col, -1)
 
     cv2.imshow(win, vis)
 

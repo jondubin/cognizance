@@ -1,6 +1,16 @@
 import sys
 import numpy as np
 import cv2
+import time
+
+class Timer:    
+    def __enter__(self):
+        self.start = time.clock()
+        return self
+
+    def __exit__(self, *args):
+        self.end = time.clock()
+        self.interval = self.end - self.start
 
 FLANN_INDEX_KDTREE = 1 # bug: flann enums are missing
 
@@ -9,6 +19,7 @@ def init_feature():
     norm = cv2.NORM_L2
     flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
     matcher = cv2.FlannBasedMatcher(flann_params, {})
+    # matcher = cv2.BFMatcher()
     return detector, matcher
 
 def filter_matches(kp1, kp2, matches, ratio = 0.65):
@@ -31,8 +42,9 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     if H is not None:
         corners = np.float32([[0, 0], [w1, 0], [w1, h1], [0, h1]])
         corners = np.int32( cv2.perspectiveTransform(corners.reshape(1, -1, 2), H).reshape(-1, 2))
-        cv2.polylines(vis, [corners], True, (255, 255, 255))
+        # cv2.polylines(vis, [corners], True, (255, 255, 255))
         # cv2.fillPoly(vis, [corners], (255, 255, 255))
+
         mask = np.zeros(vis.shape, dtype=np.uint8)
         roi_corners = np.array([[(corners[0][0],corners[0][1]), 
             (corners[1][0],corners[1][1]), 
@@ -44,20 +56,10 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
 
         # apply the mask
         masked_image = cv2.bitwise_and(vis, mask)
-        # guassian_blur = cv2.GaussianBlur(masked_image, (99, 99), 0)
-        # display your handywork
-        # vis[0:guassian_blur.shape[0], 0:guassian_blur.shape[1]] = guassian_blur
-        # vis[mask == 255] = 0
-        blurred_image = cv2.blur(vis, (15, 15), 0)
-        blurred_mask = cv2.blur(mask, (15, 15), 0)
+
+        # blurred_image = cv2.blur(vis, (15, 15), 0)
+        blurred_image = cv2.boxFilter(vis, -1, (15, 15))
         vis = vis + (cv2.bitwise_and((blurred_image-vis), mask))
-        cv2.imshow(win, vis)
-
-        # mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-        # dst = cv2.inpaint(vis, mask, 3, cv2.INPAINT_NS)
-        # cv2.imshow('dst', dst)
-        # cv2.fillPoly(vis, [corners], (255, 255, 255))
-
 
     # if status is None:
     #     status = np.ones(len(kp_pairs), np.bool_)
@@ -75,6 +77,7 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     cv2.imshow(win, vis)
 
 def main():
+    seeds = []
     arg1 = sys.argv[1]
     img1 = cv2.imread(arg1, 0)
 
@@ -82,6 +85,17 @@ def main():
 
     img1g = cv2.cvtColor(img1, cv2.COLOR_GRAY2BGR)
     kp1, desc1 = detector.detectAndCompute(img1, None)
+
+    def find_match(img, desc):
+        max_matches = 0
+        match_seed = seeds[0]
+        for seed in seeds:
+            raw_matches = matcher.knnMatch(desc, trainDescriptors = seed, k = 2)
+            p1, p2, kp_pairs = filter_matches(kp1, kp2, raw_matches)
+            if p1 > max_matches:
+                max_matches = p1
+                match_seed = seed
+                
 
     def match_and_draw(win, img1, img2, kp1, kp2, desc1, desc2):
         raw_matches = matcher.knnMatch(desc1, trainDescriptors = desc2, k = 2)
@@ -94,7 +108,7 @@ def main():
 
         vis = explore_match(win, img1, img2, kp_pairs, status, H)
 
-    cap = cv2.VideoCapture(-1)
+    cap = cv2.VideoCapture(0)
     cap.set(3,640)
     cap.set(4,480)
 
@@ -111,8 +125,12 @@ def main():
 
         # count += 1
 
-        kp2, desc2 = detector.detectAndCompute(frame, None)
-        match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
+        with Timer() as t:
+            kp2, desc2 = detector.detectAndCompute(frame, None)
+            # compute match
+            match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
+                       
+        print('took %.03f sec.' % t.interval)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

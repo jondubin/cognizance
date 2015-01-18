@@ -29,9 +29,9 @@ def create_blank(width, height, rgb_color=(0, 0, 0)):
 def init_feature():
     detector = cv2.SIFT(1000)
     norm = cv2.NORM_L2
-    flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 3)
-    matcher = cv2.FlannBasedMatcher(flann_params, {})
-    # matcher = cv2.BFMatcher()
+    # flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 3)
+    # matcher = cv2.FlannBasedMatcher(flann_params, {})
+    matcher = cv2.BFMatcher()
     return detector, matcher
 
 def filter_matches(kp1, kp2, matches, ratio = 0.65):
@@ -158,8 +158,8 @@ def main():
 
         with Timer() as t:
             kp2, desc2 = detector.detectAndCompute(frame, None)
-        (kp1, desc1), img1 = find_match(kp2, desc2)
-        match_and_draw('Brand Killer', img1, frame, kp1, kp2, desc1, desc2)
+            (kp1, desc1), img1 = find_match(kp2, desc2)
+            match_and_draw('Brand Killer', img1, frame, kp1, kp2, desc1, desc2)
         print('took %.03f sec.' % t.interval)
                        
 

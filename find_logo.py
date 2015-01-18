@@ -33,20 +33,42 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
         corners = np.int32( cv2.perspectiveTransform(corners.reshape(1, -1, 2), H).reshape(-1, 2))
         cv2.polylines(vis, [corners], True, (255, 255, 255))
         # cv2.fillPoly(vis, [corners], (255, 255, 255))
+        mask = np.zeros(vis.shape, dtype=np.uint8)
+        roi_corners = np.array([[(corners[0][0],corners[0][1]), 
+            (corners[1][0],corners[1][1]), 
+            (corners[2][0],corners[2][1]), 
+            (corners[3][0], corners[3][1])]], dtype=np.int32)
+        white = (255, 255, 255)
+        black = (0, 0, 0)
+        cv2.fillPoly(mask, roi_corners, white)
 
+        # apply the mask
+        masked_image = cv2.bitwise_and(vis, mask)
+        # guassian_blur = cv2.GaussianBlur(masked_image, (99, 99), 0)
+        # display your handywork
+        # vis[0:guassian_blur.shape[0], 0:guassian_blur.shape[1]] = guassian_blur
+        # vis[mask == 255] = 0
+        blurred_image = cv2.blur(vis, (15, 15), 0)
+        blurred_mask = cv2.blur(mask, (15, 15), 0)
+        vis = vis + (cv2.bitwise_and((blurred_image-vis), mask))
+        cv2.imshow(win, vis)
 
-    if status is None:
-        status = np.ones(len(kp_pairs), np.bool_)
-    p2 = np.int32([kpp[1].pt for kpp in kp_pairs])
+        # mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+        # dst = cv2.inpaint(vis, mask, 3, cv2.INPAINT_NS)
+        # cv2.imshow('dst', dst)
 
-    green = (0, 255, 0)
-    red = (0, 0, 255)
-    white = (255, 255, 255)
-    kp_color = (51, 103, 236)
-    for (x, y), inlier in zip(p2, status):
-        if inlier:
-            col = green
-            cv2.circle(vis, (x, y), 2, col, -1)
+    # if status is None:
+    #     status = np.ones(len(kp_pairs), np.bool_)
+    # p2 = np.int32([kpp[1].pt for kpp in kp_pairs])
+
+    # green = (0, 255, 0)
+    # red = (0, 0, 255)
+    # white = (255, 255, 255)
+    # kp_color = (51, 103, 236)
+    # for (x, y), inlier in zip(p2, status):
+    #     if inlier:
+    #         col = green
+    #         cv2.circle(vis, (x, y), 2, col, -1)
 
     cv2.imshow(win, vis)
 
@@ -70,7 +92,7 @@ def main():
 
         vis = explore_match(win, img1, img2, kp_pairs, status, H)
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(-1)
     cap.set(3,640)
     cap.set(4,480)
 

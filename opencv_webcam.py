@@ -14,7 +14,7 @@ def create_blank(width, height, rgb_color=(0, 0, 0)):
     return image
 
 cv2.namedWindow("preview", cv2.WND_PROP_FULLSCREEN)
-vc = cv2.VideoCapture(1)
+vc = cv2.VideoCapture(0)
 
 x_offset=y_offset=250
 black = (0, 0, 0)

@@ -14,10 +14,22 @@ class Timer:
 
 FLANN_INDEX_KDTREE = 1 # bug: flann enums are missing
 
+def create_blank(width, height, rgb_color=(0, 0, 0)):
+    """Create new image(numpy array) filled with certain color in RGB"""
+    # Create black blank image
+    image = np.zeros((height, width, 3), np.uint8)
+
+    # Since OpenCV uses BGR, convert the color first
+    color = tuple(reversed(rgb_color))
+    # Fill image with color
+    image[:] = color
+
+    return image
+
 def init_feature():
     detector = cv2.SIFT(1000)
     norm = cv2.NORM_L2
-    flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+    flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 3)
     matcher = cv2.FlannBasedMatcher(flann_params, {})
     # matcher = cv2.BFMatcher()
     return detector, matcher
@@ -51,14 +63,13 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
             (corners[2][0],corners[2][1]), 
             (corners[3][0], corners[3][1])]], dtype=np.int32)
         white = (255, 255, 255)
-        black = (0, 0, 0)
         cv2.fillPoly(mask, roi_corners, white)
 
         # apply the mask
         masked_image = cv2.bitwise_and(vis, mask)
 
         # blurred_image = cv2.blur(vis, (15, 15), 0)
-        blurred_image = cv2.boxFilter(vis, -1, (15, 15))
+        blurred_image = cv2.boxFilter(vis, -1, (17, 17))
         vis = vis + (cv2.bitwise_and((blurred_image-vis), mask))
 
     # if status is None:
@@ -74,27 +85,47 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     #         col = green
     #         cv2.circle(vis, (x, y), 2, col, -1)
 
-    cv2.imshow(win, vis)
+    # view params
+    width, height = 1280, 800
+    x_offset = 260
+    y_offset = 500
+    l_img = create_blank(width, height, rgb_color=(0,0,0))
+
+    vis = np.append(vis, vis, axis=1)
+    vis = cv2.resize(vis, (0,0), fx=0.6, fy=0.6)
+
+    l_img[y_offset:y_offset+vis.shape[0], x_offset:x_offset+vis.shape[1]] = vis 
+
+    cv2.namedWindow(win, cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty(win, cv2.WND_PROP_AUTOSIZE, cv2.cv.CV_WINDOW_AUTOSIZE)
+    cv2.imshow(win, l_img)
 
 def main():
-    seeds = []
-    arg1 = sys.argv[1]
-    img1 = cv2.imread(arg1, 0)
+    imgs = [cv2.imread("images/ps1.jpg", 0),
+            cv2.imread("images/linodeb.jpg", 0),
+            cv2.imread("images/dp1.png", 0)]
 
     detector, matcher = init_feature()
 
-    img1g = cv2.cvtColor(img1, cv2.COLOR_GRAY2BGR)
-    kp1, desc1 = detector.detectAndCompute(img1, None)
+    seeds = []
+    for i in imgs:
+        k, d = detector.detectAndCompute(i, None)
+        seeds.append((k,d))
 
-    def find_match(img, desc):
+    def find_match(kp, desc):
         max_matches = 0
-        match_seed = seeds[0]
-        for seed in seeds:
-            raw_matches = matcher.knnMatch(desc, trainDescriptors = seed, k = 2)
-            p1, p2, kp_pairs = filter_matches(kp1, kp2, raw_matches)
-            if p1 > max_matches:
-                max_matches = p1
-                match_seed = seed
+        match_img = imgs[0]
+        match_desc= seeds[0]
+
+        for i, seed in enumerate(seeds):
+            raw_matches = matcher.knnMatch(desc, trainDescriptors = seed[1], k = 2)
+            p1, p2, kp_pairs = filter_matches(kp, seed[0], raw_matches)
+            if len(p1) > max_matches:
+                max_matches = len(p1)
+                match_desc = seed
+                match_img = imgs[i]
+
+        return (match_desc, match_img)
                 
 
     def match_and_draw(win, img1, img2, kp1, kp2, desc1, desc2):
@@ -115,7 +146,7 @@ def main():
     count = 0
     while True:
         ret, frame = cap.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # if count % 2 == 0 :
         #     kp2, desc2 = detector.detectAndCompute(frame, None)
@@ -127,10 +158,10 @@ def main():
 
         with Timer() as t:
             kp2, desc2 = detector.detectAndCompute(frame, None)
-            # compute match
-            match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
-                       
+        (kp1, desc1), img1 = find_match(kp2, desc2)
+        match_and_draw('Brand Killer', img1, frame, kp1, kp2, desc1, desc2)
         print('took %.03f sec.' % t.interval)
+                       
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

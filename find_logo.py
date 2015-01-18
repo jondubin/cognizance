@@ -56,6 +56,8 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
         # mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
         # dst = cv2.inpaint(vis, mask, 3, cv2.INPAINT_NS)
         # cv2.imshow('dst', dst)
+        # cv2.fillPoly(vis, [corners], (255, 255, 255))
+
 
     # if status is None:
     #     status = np.ones(len(kp_pairs), np.bool_)
@@ -101,12 +103,16 @@ def main():
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # count += 1
-        # if count % 30 == 0:
+        # if count % 30 == 0 or count == 0:
         #     kp2, desc2 = detector.detectAndCompute(frame, None)
+        #     lkt.set_points(desc2, frame)
         #     match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
         # else:
-        #     cv2.imshow('find_obj', frame)
+        #     lkt.track_points(frame)
+        #     lkt.draw('find_obj')
+        #     # cv2.imshow('find_obj', frame)
+
+        # count += 1
 
         kp2, desc2 = detector.detectAndCompute(frame, None)
         match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)

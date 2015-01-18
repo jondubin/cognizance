@@ -28,7 +28,7 @@ def create_blank(width, height, rgb_color=(0, 0, 0)):
 
 def init_feature():
     detector = cv2.SIFT(1000)
-    norm = cv2.NORM_L2
+    # norm = cv2.NORM_L2
     # flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 3)
     # matcher = cv2.FlannBasedMatcher(flann_params, {})
     matcher = cv2.BFMatcher()
@@ -69,7 +69,7 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
         masked_image = cv2.bitwise_and(vis, mask)
 
         # blurred_image = cv2.blur(vis, (15, 15), 0)
-        blurred_image = cv2.boxFilter(vis, -1, (17, 17))
+        blurred_image = cv2.boxFilter(vis, -1, (27, 27))
         vis = vis + (cv2.bitwise_and((blurred_image-vis), mask))
 
     # if status is None:
@@ -103,16 +103,11 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
 def main():
     imgs = [cv2.imread("images/ps1.jpg", 0),
             cv2.imread("images/linodeb.jpg", 0),
+            cv2.imread("images/google1.png", 0),
+            cv2.imread("images/hersheys1.png", 0),
             cv2.imread("images/luckycharm.jpg", 0),
-            cv2.imread("images/fb1.jpg", 0),
-            cv2.imread("images/m&ms1.jpg", 0),
-            cv2.imread("images/orbit.jpg", 0),
-            cv2.imread("images/tastykake1.jpg", 0),
             cv2.imread("images/starbucks1.jpg", 0),
-            cv2.imread("images/cola.jpg", 0),
-            cv2.imread("images/aw.jpg", 0),
-            cv2.imread("images/hersheys1.jpg", 0),
-            cv2.imread("images/google1.jpg", 0),
+            cv2.imread("images/tastykake1.png", 0),
             cv2.imread("images/dp1.png", 0)]
 
     detector, matcher = init_feature()

@@ -58,7 +58,7 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
         masked_image = cv2.bitwise_and(vis, mask)
 
         # blurred_image = cv2.blur(vis, (15, 15), 0)
-        blurred_image = cv2.boxFilter(vis, -1, (15, 15))
+        blurred_image = cv2.boxFilter(vis, -1, (17, 17))
         vis = vis + (cv2.bitwise_and((blurred_image-vis), mask))
 
     # if status is None:
@@ -74,6 +74,7 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     #         col = green
     #         cv2.circle(vis, (x, y), 2, col, -1)
 
+    vis = np.append(vis, vis, axis=1)
     cv2.imshow(win, vis)
 
 def main():
@@ -87,10 +88,6 @@ def main():
     for i in imgs:
         k, d = detector.detectAndCompute(i, None)
         seeds.append((k,d))
-
-    # arg1 = sys.argv[1]
-    # img1 = cv2.imread(arg1, 0)
-    # kp1, desc1 = detector.detectAndCompute(img1, None)
 
     def find_match(kp, desc):
         max_matches = 0

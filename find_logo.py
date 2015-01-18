@@ -79,14 +79,11 @@ def main():
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # if count % 30 == 0 or count == 0:
+        # if count % 2 == 0 :
         #     kp2, desc2 = detector.detectAndCompute(frame, None)
-        #     lkt.set_points(desc2, frame)
         #     match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
         # else:
-        #     lkt.track_points(frame)
-        #     lkt.draw('find_obj')
-        #     # cv2.imshow('find_obj', frame)
+        #     cv2.imshow('find_obj', frame)
 
         # count += 1
 

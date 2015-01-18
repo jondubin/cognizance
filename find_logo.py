@@ -7,7 +7,7 @@ FLANN_INDEX_KDTREE = 1 # bug: flann enums are missing
 def init_feature():
     detector = cv2.SIFT(1000)
     norm = cv2.NORM_L2
-    flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 3)
+    flann_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
     matcher = cv2.FlannBasedMatcher(flann_params, {})
     return detector, matcher
 

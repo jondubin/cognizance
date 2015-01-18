@@ -77,24 +77,35 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     cv2.imshow(win, vis)
 
 def main():
-    seeds = []
-    arg1 = sys.argv[1]
-    img1 = cv2.imread(arg1, 0)
+    imgs = [cv2.imread("images/ps1.jpg", 0),
+            cv2.imread("images/linodeb.jpg", 0),
+            cv2.imread("images/dp1.png", 0)]
 
     detector, matcher = init_feature()
 
-    img1g = cv2.cvtColor(img1, cv2.COLOR_GRAY2BGR)
-    kp1, desc1 = detector.detectAndCompute(img1, None)
+    seeds = []
+    for i in imgs:
+        k, d = detector.detectAndCompute(i, None)
+        seeds.append((k,d))
 
-    def find_match(img, desc):
+    # arg1 = sys.argv[1]
+    # img1 = cv2.imread(arg1, 0)
+    # kp1, desc1 = detector.detectAndCompute(img1, None)
+
+    def find_match(kp, desc):
         max_matches = 0
-        match_seed = seeds[0]
-        for seed in seeds:
-            raw_matches = matcher.knnMatch(desc, trainDescriptors = seed, k = 2)
-            p1, p2, kp_pairs = filter_matches(kp1, kp2, raw_matches)
-            if p1 > max_matches:
-                max_matches = p1
-                match_seed = seed
+        match_img = imgs[0]
+        match_desc= desc[0]
+
+        for i, seed in enumerate(seeds):
+            raw_matches = matcher.knnMatch(desc, trainDescriptors = seed[1], k = 2)
+            p1, p2, kp_pairs = filter_matches(kp, seed[0], raw_matches)
+            if len(p1) > max_matches:
+                max_matches = len(p1)
+                match_desc = seed
+                match_img = imgs[i]
+
+        return (match_desc, match_img)
                 
 
     def match_and_draw(win, img1, img2, kp1, kp2, desc1, desc2):
@@ -127,7 +138,7 @@ def main():
 
         with Timer() as t:
             kp2, desc2 = detector.detectAndCompute(frame, None)
-            # compute match
+            (kp1, desc1), img1 = find_match(kp2, desc2)
             match_and_draw('find_obj', img1, frame, kp1, kp2, desc1, desc2)
                        
         print('took %.03f sec.' % t.interval)

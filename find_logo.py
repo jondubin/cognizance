@@ -103,6 +103,16 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
 def main():
     imgs = [cv2.imread("images/ps1.jpg", 0),
             cv2.imread("images/linodeb.jpg", 0),
+            cv2.imread("images/luckycharm.jpg", 0),
+            cv2.imread("images/fb1.jpg", 0),
+            cv2.imread("images/m&ms1.jpg", 0),
+            cv2.imread("images/orbit.jpg", 0),
+            cv2.imread("images/tastykake1.jpg", 0),
+            cv2.imread("images/starbucks1.jpg", 0),
+            cv2.imread("images/cola.jpg", 0),
+            cv2.imread("images/aw.jpg", 0),
+            cv2.imread("images/hersheys1.jpg", 0),
+            cv2.imread("images/google1.jpg", 0),
             cv2.imread("images/dp1.png", 0)]
 
     detector, matcher = init_feature()

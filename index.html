@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Brand Killer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="./css/bootstrap.min.css" media="screen">
+		<link rel="stylesheet" href="./css/font-awesome.min.css" media="screen">
+		<link rel="stylesheet" href="./css/site.css" media="screen">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div class="navbar navbar-default" style="margin-bottom:0;">
+			<div class="navbar-header">
+				<a href="./" class="navbar-brand">Brand Killer: Adblock for Real Life.</a>
+			</div>
+			<div class="navbar-collapse collapse" id="navbar-main">
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="http://challengepost.com/software/brand-killer">More Info</a>
+					</li>
+					<li>
+						<a href="https://github.com/jondubin/cognizance">Get the Code</a>
+					</li>
+
+				</ul>
+			<div class="pull-right" style="color:#98978b;padding-top:10px;padding-right:20px;">
+			<i>Created at <a href="http://2015s.pennapps.com/">PennAppsW2015</a> by <a href="http://reedrosenbluth.com/">Reed Rosenbluth</a>, <a href="http://jonathandub.in/">Jonathan Dubin</a>, <a href="http://www.tcatullo.com/">Tom Catullo</a>, and <a href="http://alexcrits-christoph.com/">Alex Crits-Christoph</a>.</i>
+			</div>
+
+			</div>
+		</div>
+
+		<div class="container">
+		<p class="lead" style="margin-top:20px;">
+		Corporate branding and advertisements are ubiquitous in society today and impossible to avoid. What if we lived in a world where consumers were blind to the excesses of corporte branding? Brand Killer is a technology demonstration of a future world in which consumers can empower themselves using augmented reality to literally ignore corporate influence.
+		We built head mounted display which uses openCV image processing to recognize and block brands and logos from the user's point of view in real time. It's AdBlock for Real Life.
+		</p>
+		</div>
+		</section>
+
+<iframe id="video_obj" type="text/html" style="border:none; margin:0; padding:0; overflow:hidden; z-index:999999;" src="https://www.youtube-nocookie.com/embed/eDPn7MGxPjs?playlist=DjxwLr6TjHs&rel=0&autoplay=1&controls=0&showinfo=0&loop=1&iv_load_policy=3&enablejsapi=1&modestbranding=1&showinfo=0" frameborder="0" allowfullscreen></iframe>
+
+
+	<script>
+	        var tag = document.createElement('script');
+
+        tag.src = "http://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('video_obj', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady() {
+            player.playVideo();
+            // Mute!
+            player.mute();
+        }
+	</script>
+	</body>
+</html>

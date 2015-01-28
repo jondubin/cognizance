@@ -164,7 +164,7 @@ def main():
         # count += 1
 
         with Timer() as t:
-            if count % 10 == 0:
+            if count % 8 == 0:
                 kp2, desc2 = detector.detectAndCompute(frame, None)
                 (kp1, desc1), img1 = find_match(kp2, desc2)
         match_and_draw('Brand Killer', img1, frame, kp1, kp2, desc1, desc2)

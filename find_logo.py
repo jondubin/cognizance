@@ -164,11 +164,14 @@ def main():
         # count += 1
 
         with Timer() as t:
-            kp2, desc2 = detector.detectAndCompute(frame, None)
-            (kp1, desc1), img1 = find_match(kp2, desc2)
-            match_and_draw('Brand Killer', img1, frame, kp1, kp2, desc1, desc2)
+            if count % 10 == 0:
+                kp2, desc2 = detector.detectAndCompute(frame, None)
+                (kp1, desc1), img1 = find_match(kp2, desc2)
+        match_and_draw('Brand Killer', img1, frame, kp1, kp2, desc1, desc2)
+        
+        count += 1
         print('took %.03f sec.' % t.interval)
-                       
+                
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

@@ -2,8 +2,8 @@
 
 Corporate branding and advertisements are ubiquitous in society today and almost impossible to avoid. What if we lived in a world where consumers were blind to this surplus of corporate branding? Brand Killer is a technology demonstration that envisions a future in which consumers can use augmented reality to opt out corporate influence. We built a head mounted display which uses computer vision to recognize and block brands and logos from the user's view in real time. It's AdBlock for Real Life.
 
-[Project site](http://jonathandub.in/cognizance/)
-[Direct link to Youtube video](https://www.youtube.com/watch?v=eDPn7MGxPjs)
+- [Project site](http://jonathandub.in/cognizance/)
+- [Direct link to Youtube video](https://www.youtube.com/watch?v=eDPn7MGxPjs)
 
 Media:
 - [Wired - An AR Experiment That Works Like an Ad Blocker for Real Life](http://www.wired.com/2015/01/adblock-real-life-adblock-real-life/)

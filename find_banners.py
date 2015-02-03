@@ -101,58 +101,60 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     cv2.imshow(win, l_img)
 
 def main():
-    imgs = [cv2.imread("images/ps1.jpg", 0),
-            cv2.imread("images/linodeb.jpg", 0),
-            #cv2.imread("images/google1.png", 0),
-            #cv2.imread("images/hersheys1.png", 0),
-            cv2.imread("images/luckycharm.jpg", 0),
-            cv2.imread("images/starbucks1.jpg", 0),
-            cv2.imread("images/mcdonalds.png", 0),
-            cv2.imread("images/drpepper.png", 0),
-            cv2.imread("images/spotify.jpg", 0),
-            cv2.imread("images/pennapps.png", 0)]
+    # imgs = [cv2.imread("images/ps1.jpg", 0),
+    #         cv2.imread("images/linodeb.jpg", 0),
+    #         #cv2.imread("images/google1.png", 0),
+    #         #cv2.imread("images/hersheys1.png", 0),
+    #         cv2.imread("images/luckycharm.jpg", 0),
+    #         cv2.imread("images/starbucks1.jpg", 0),
+    #         cv2.imread("images/mcdonalds.png", 0),
+    #         cv2.imread("images/drpepper.png", 0),
+    #         cv2.imread("images/spotify.jpg", 0),
+    #         cv2.imread("images/pennapps.png", 0)]
 
-    detector, matcher = init_feature()
+    # detector, matcher = init_feature()
 
-    seeds = []
-    for i in imgs:
-        k, d = detector.detectAndCompute(i, None)
-        seeds.append((k,d))
+    # seeds = []
+    # for i in imgs:
+    #     k, d = detector.detectAndCompute(i, None)
+    #     seeds.append((k,d))
 
-    def find_match(kp, desc):
-        max_matches = 0
-        match_img = imgs[0]
-        match_desc= seeds[0]
+    # def find_match(kp, desc):
+    #     max_matches = 0
+    #     match_img = imgs[0]
+    #     match_desc= seeds[0]
 
-        for i, seed in enumerate(seeds):
-            raw_matches = matcher.knnMatch(desc, trainDescriptors = seed[1], k = 2)
-            p1, p2, kp_pairs = filter_matches(kp, seed[0], raw_matches)
-            if len(p1) > max_matches:
-                max_matches = len(p1)
-                match_desc = seed
-                match_img = imgs[i]
+    #     for i, seed in enumerate(seeds):
+    #         raw_matches = matcher.knnMatch(desc, trainDescriptors = seed[1], k = 2)
+    #         p1, p2, kp_pairs = filter_matches(kp, seed[0], raw_matches)
+    #         if len(p1) > max_matches:
+    #             max_matches = len(p1)
+    #             match_desc = seed
+    #             match_img = imgs[i]
 
-        return (match_desc, match_img)
+    #     return (match_desc, match_img)
 
 
-    def match_and_draw(win, img1, img2, kp1, kp2, desc1, desc2):
-        raw_matches = matcher.knnMatch(desc1, trainDescriptors = desc2, k = 2)
-        p1, p2, kp_pairs = filter_matches(kp1, kp2, raw_matches)
+    # def match_and_draw(win, img1, img2, kp1, kp2, desc1, desc2):
+    #     raw_matches = matcher.knnMatch(desc1, trainDescriptors = desc2, k = 2)
+    #     p1, p2, kp_pairs = filter_matches(kp1, kp2, raw_matches)
 
-        if len(p1) >= 4:
-            H, status = cv2.findHomography(p1, p2, cv2.RANSAC, 5.0)
-        else:
-            H, status = None, None
+    #     if len(p1) >= 4:
+    #         H, status = cv2.findHomography(p1, p2, cv2.RANSAC, 5.0)
+    #     else:
+    #         H, status = None, None
 
-        vis = explore_match(win, img1, img2, kp_pairs, status, H)
+    #     vis = explore_match(win, img1, img2, kp_pairs, status, H)
 
-    cap = cv2.VideoCapture(0)
-    cap.set(3,640)
-    cap.set(4,480)
-
+    cap = cv2.VideoCapture('soccer_videos/clip.mp4')
+    # cap.set(3, 320)
+    # cap.set(4, 240)
 
     while(cap.isOpened()):
         ret, frame = cap.read()
+
+        #cv2.imshow('frame', frame)
+        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         cv2.imshow('frame', frame)
 
@@ -183,7 +185,6 @@ def main():
 
     #     if cv2.waitKey(1) & 0xFF == ord('q'):
     #         break
-
 
     cap.release()
     cv2.destroyAllWindows()

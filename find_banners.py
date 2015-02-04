@@ -86,19 +86,19 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     #         cv2.circle(vis, (x, y), 2, col, -1)
 
     # view params
-    width, height = 1280, 800
-    x_offset = 260
-    y_offset = 500
-    l_img = create_blank(width, height, rgb_color=(0,0,0))
+    # width, height = 1280, 800
+    # x_offset = 260
+    # y_offset = 500
+    # l_img = create_blank(width, height, rgb_color=(0,0,0))
 
-    vis = np.append(vis, vis, axis=1)
-    vis = cv2.resize(vis, (0,0), fx=0.6, fy=0.6)
+    # vis = np.append(vis, vis, axis=1)
+    # vis = cv2.resize(vis, (0,0), fx=0.6, fy=0.6)
 
-    l_img[y_offset:y_offset+vis.shape[0], x_offset:x_offset+vis.shape[1]] = vis
+    # l_img[y_offset:y_offset+vis.shape[0], x_offset:x_offset+vis.shape[1]] = vis
 
-    cv2.namedWindow(win, cv2.WND_PROP_FULLSCREEN)
-    cv2.setWindowProperty(win, cv2.WND_PROP_AUTOSIZE, cv2.cv.CV_WINDOW_AUTOSIZE)
-    cv2.imshow(win, l_img)
+    # cv2.namedWindow(win, cv2.WND_PROP_FULLSCREEN)
+    # cv2.setWindowProperty(win, cv2.WND_PROP_AUTOSIZE, cv2.cv.CV_WINDOW_AUTOSIZE)
+    # cv2.imshow(win, l_img)
 
 def main():
     # imgs = [cv2.imread("images/ps1.jpg", 0),
@@ -158,7 +158,7 @@ def main():
 
         cv2.imshow('frame', frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(30) & 0xFF == ord('q'):
             break
 
     # while True:

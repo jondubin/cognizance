@@ -11,3 +11,7 @@ Media:
 - [Gizmodo - Someone Built AdBlock For the Real World ](http://gizmodo.com/someone-built-adblock-for-the-real-world-1682420151)
 - [Gizmodo Germany - BRAND KILLER: DER ADBLOCKER FÜR DIE REALITÄT](http://www.gizmodo.de/2015/01/30/brand-killer-der-adblocker-fuer-die-realitaet.html)
 - [In the Now (RT) - Brand-killer: a device that will make your life ad-free](https://www.youtube.com/watch?v=M7qD6smiYtg)
+
+Let's Play videos:
+- [ReviewTechUSA - Group Of Guys Create Real-Life "Ad-Blocker"](https://www.youtube.com/watch?v=7oUjGnFLNT0)
+- [MiZiiCz - Adblocker In Real Life (CoD AW gameplay)](https://www.youtube.com/watch?v=yQFjBLULI5Y)

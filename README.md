@@ -10,3 +10,4 @@ Media:
 - [Wired Germany -  Sehen wir bald nur noch, was wir sehen wollen? Augmented-Reality-Brille verbannt Werbung aus unserem Alltag](https://www.wired.de/collection/latest/die-augmented-reality-brille-brand-killer-ist-der-adblocker-fur-den-alltag)
 - [Gizmodo - Someone Built AdBlock For the Real World ](http://gizmodo.com/someone-built-adblock-for-the-real-world-1682420151)
 - [Gizmodo Germany - BRAND KILLER: DER ADBLOCKER FÜR DIE REALITÄT](http://www.gizmodo.de/2015/01/30/brand-killer-der-adblocker-fuer-die-realitaet.html)
+- [In the Now (RT) - Brand-killer: a device that will make your life ad-free](https://www.youtube.com/watch?v=M7qD6smiYtg)

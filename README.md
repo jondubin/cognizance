@@ -4,6 +4,7 @@ Corporate branding and advertisements are ubiquitous in society today and almost
 
 - [Project site](http://jonathandub.in/cognizance/)
 - [Direct link to Youtube video](https://www.youtube.com/watch?v=eDPn7MGxPjs)
+- [Discussion on HN](https://news.ycombinator.com/item?id=8925019)
 
 Media:
 - [Wired - An AR Experiment That Works Like an Ad Blocker for Real Life](http://www.wired.com/2015/01/adblock-real-life-adblock-real-life/)
